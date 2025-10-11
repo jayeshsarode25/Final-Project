@@ -6,10 +6,10 @@ async function getCart(req, res) {
     const user = req.user;
 
     // use _id because auth token payload provides _id (tests sign tokens with _id)
-    let cart = await cartModel.findOne({ user: user._id });
+    let cart = await cartModel.findOne({ user: user.id });
 
     if (!cart) {
-        cart = new cartModel({ user: user._id, items: [] });
+        cart = new cartModel({ user: user.id, items: [] });
         await cart.save();
     }
 
@@ -29,11 +29,11 @@ async function addIteamToCart(req, res) {
 
     const user = req.user;
 
-    let cart = await cartModel.findOne({ user: user._id });
+    let cart = await cartModel.findOne({ user: user.id });
 
     if(!cart){
         cart = new cartModel({
-            user: user._id,
+            user: user.id,
             items: []
         }); 
     }
@@ -55,7 +55,7 @@ async function updateItemQuantity(req, res) {
     const { qty } = req.body;
     const user = req.user;
     // tests and auth payload use _id
-    const cart = await cartModel.findOne({ user: user._id });
+    const cart = await cartModel.findOne({ user: user.id });
     if (!cart) {
         return res.status(404).json({ message: 'Cart not found' });
     }

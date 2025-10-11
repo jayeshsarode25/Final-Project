@@ -4,17 +4,34 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --runInBand",
+    "dev": "npx nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "mongodb-memory-server": "^8.14.0",
+    "supertest": "^6.3.3"
+  },
   "dependencies": {
+    "axios": "^1.12.2",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+  "setupFiles": ["<rootDir>/test/setup/mock-axios.js","<rootDir>/test/setup/env.js"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setup/jest-mongoose.js"
+    ]
   }
 }

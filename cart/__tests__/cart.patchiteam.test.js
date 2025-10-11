@@ -47,12 +47,12 @@ describe('PATCH /api/cart/items/:productId', () => {
     });
 
     test('updates quantity of existing item', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
         // create cart + item
         await request(app)
             .post(postEndpoint)
             .set('Authorization', `Bearer ${token}`)
-            .send({ productId: existingProductId, qty: 2 });
+            .send({ productId, qty: 2 });
 
         const res = await request(app)
             .patch(`${patchBase}/${existingProductId}`)
@@ -65,7 +65,7 @@ describe('PATCH /api/cart/items/:productId', () => {
     });
 
     test('404 when cart not found', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
         const res = await request(app)
             .patch(`${patchBase}/${existingProductId}`)
             .set('Authorization', `Bearer ${token}`)
@@ -75,7 +75,7 @@ describe('PATCH /api/cart/items/:productId', () => {
     });
 
     test('404 when item not in cart', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
         await request(app)
             .post(postEndpoint)
             .set('Authorization', `Bearer ${token}`)
@@ -91,7 +91,7 @@ describe('PATCH /api/cart/items/:productId', () => {
     });
 
     test('validation error invalid productId param', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
         const res = await request(app)
             .patch(`${patchBase}/not-a-valid-id`)
             .set('Authorization', `Bearer ${token}`)
@@ -101,7 +101,7 @@ describe('PATCH /api/cart/items/:productId', () => {
     });
 
     test('validation error invalid qty', async () => {
-        const token = signToken({ _id: userId, role: 'user' });
+        const token = signToken({ id: userId, role: 'user' });
         await request(app)
             .post(postEndpoint)
             .set('Authorization', `Bearer ${token}`)
@@ -124,7 +124,7 @@ describe('PATCH /api/cart/items/:productId', () => {
     });
 
     test('403 when role not allowed', async () => {
-        const token = signToken({ _id: userId, role: 'admin' });
+        const token = signToken({ id: userId, role: 'admin' });
         const res = await request(app)
             .patch(`${patchBase}/${existingProductId}`)
             .set('Authorization', `Bearer ${token}`)
