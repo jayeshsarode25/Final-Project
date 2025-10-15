@@ -1,5 +1,6 @@
 const orderModel = require("../models/order.model");
 const axios = require("axios");
+const { publishToQueue } = require("../broker/borker");
 
 async function createOrder(req, res) {
   const user = req.user; // Assuming user info is attached to req object
@@ -83,6 +84,8 @@ async function createOrder(req, res) {
                 country: req.body.shippingAddress.country,
             }
         })
+
+         await publishToQueue("ORDER_SELLER_DASHBOARD.ORDER_CREATED", order)
 
     res.status(201).json({ message: "Order created successfully", order });
   } catch (err) {

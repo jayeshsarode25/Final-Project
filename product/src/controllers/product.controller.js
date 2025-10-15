@@ -1,6 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const productModel = require('../models/product.model');
 const { uploadImage } = require('../services/imagekit.service');
+const { publishToQueue } = require('../broker/borker');
 
 // ensure publishToQueue exists; in production this can be provided by a queue service
 const publishToQueue = (typeof global.publishToQueue === 'function') ? global.publishToQueue : async () => {};

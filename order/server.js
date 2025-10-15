@@ -1,11 +1,14 @@
 require('dotenv').config();
 const app = require('./src/app');
 const connectDB = require('./src/db/db');
+const { connect } = require("./src/broker/borker")
 
 
 // Connect to the database
 connectDB();  
 
+// Connect to the message broker
+connect();
 
 
 app.listen(3003, () => {
