@@ -10,6 +10,13 @@ app.use(cookieParser());
 app.use(express.json());
 
 
+app.get('/', (req, res) => {
+    res.status(200).json({
+        message: "Order service is running"
+    });
+})
+
+
 app.use('/api/orders', orderRoute);
 
 

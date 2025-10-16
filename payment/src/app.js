@@ -10,6 +10,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 
+app.get('/', (req, res) => {
+    res.status(200).json({
+        message: "Payment service is running"
+    });
+});
+
+
 app.use('/api/payments', paymentRoutes);
 
 

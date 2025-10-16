@@ -51,14 +51,14 @@ module.exports = function setListeners() {
         await sendEmail(data.email, "Payment Failed", "Your payment could not be processed", emailHTMLTemplate);
     })
 
-    // subscribeToQueue("PRODUCT_NOTIFICATION.PRODUCT_CREATED", async (data) => {
-    //     const emailHTMLTemplate = `
-    //     <h1>New Product Available!</h1>
-    //     <p>Dear ${data.username},</p>
-    //     <p>Check it out and enjoy exclusive launch offers!</p>
-    //     <p>Best regards,<br/>The Team</p>
-    //     `;
-    //     await sendEmail(data.email, "New Product Launched", "Check out our latest product", emailHTMLTemplate);
-    // })
+    subscribeToQueue("PRODUCT_NOTIFICATION.PRODUCT_CREATED", async (data) => {
+        const emailHTMLTemplate = `
+        <h1>New Product Available!</h1>
+        <p>Dear ${data.username},</p>
+        <p>Check it out and enjoy exclusive launch offers!</p>
+        <p>Best regards,<br/>The Team</p>
+        `;
+        await sendEmail(data.email, "New Product Launched", "Check out our latest product", emailHTMLTemplate);
+    })
 
 }
