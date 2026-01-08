@@ -3,7 +3,7 @@ import MainRoutes from './routes/MainRoutes'
 
 const App = () => {
   return (
-    <div >
+    <div className='h-screen w-full'>
       <MainRoutes/>
     </div>
   )
