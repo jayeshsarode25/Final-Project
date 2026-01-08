@@ -77,6 +77,59 @@ async function RegisterUser(req, res) {
   }
 }
 
+
+export async function googleOAuthCallback(req, res) {
+  const user = req.user;
+
+  const isUseralreadyExits = await userModel.findOne({
+    $or: [{ email: user.emails[0].value }, { googleId: user.id }],
+  });
+
+  if (isUseralreadyExits) {
+    const token = jwt.sign(
+      { id: isUseralreadyExits._id, role: isUseralreadyExits.role },
+      config.JWT_SECRET,
+      { expiresIn: "2d" }
+    );
+
+
+    res.cookie("token", token);
+
+     if(isUseralreadyExits.role === "seller"){
+    return res.redirect('http://localhost:5173/');
+  }
+
+
+    return res.redirect('http://localhost:5173');
+  }
+
+  const newUser = await userModel.create({
+    email: user.emails[0].value,
+    googleId: user.id,
+    fullName: {
+      firstName: user.name.givenName,
+      lastName: user.name.familyName,
+    },
+  });
+
+  await publishToQueue("user_created", {
+    id: newUser._id,
+    email: newUser.email,
+    fullname: newUser.fullName,
+    role: newUser.role,
+  });
+
+  const token = jwt.sign(
+    { id: newUser._id, role: newUser.role },
+    config.JWT_SECRET,
+    { expiresIn: "2d" }
+  );
+  res.cookie("token", token);
+
+  res.redirect('http://localhost:5173');
+}
+
+
 async function LoginUser(req, res) {
   try {
     const { username, email, password } = req.body;

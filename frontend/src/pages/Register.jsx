@@ -1,6 +1,15 @@
 import React from "react";
 
 const Register = () => {
+
+
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      console.log("Form submitted");
+    }
+
+
   return (
     <div className="h-screen w-full max-w-full bg-gray-950 flex flex-col justify-center items-center text-white">
       <div className="flex flex-col justify-center items-center border-2 p-10 rounded-lg w-11/12 max-w-md">
@@ -18,7 +27,7 @@ const Register = () => {
           <div className="grow border-t border-gray-400"></div>
         </div>
 
-        <form className="w-full p-5 rounded-lg space-y-4">
+        <form onSubmit={handleSubmit} noValidate className="w-full p-5 rounded-lg space-y-4">
           <div className="flex flex-col">
             <label className="text-lg font-medium" htmlFor="email">Email</label>
             <input 
@@ -44,19 +53,18 @@ const Register = () => {
             </div>
           </div>
 
-          <fieldset >
-            <legend >
+          <fieldset className="flex flex-col">
+            <legend className="text-lg font-semibold text-gray-300">
               Account type
             </legend>
-            <div >
-              <label >
+            <div className="flex items-center gap-5">
+              <label className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="userType"
                   value="user"
-
-                  
-                  
+                  checked={true}
+                  className="accent-blue-500"
                 />
                 <span>User</span>
               </label>
@@ -64,12 +72,11 @@ const Register = () => {
                 <input
                   type="radio"
                   name="userType"
-                  value="admin"
-                  
-                  
-                  
+                  value="seller"
+                  checked={false}
+                  className="accent-blue-500"
                 />
-                <span>Admin</span>
+                <span>Seller</span>
               </label>
             </div>
           </fieldset>
