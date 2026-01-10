@@ -4,6 +4,7 @@ import { registerUser } from "../redux/reducer/userSlice";
 
 const Register = () => {
   const [form, setForm] = useState({
+    username: "",
     email: "",
     firstName: "",
     lastName: "",
@@ -12,13 +13,14 @@ const Register = () => {
   });
 
   const dispatch = useDispatch();
+  const { loading, error, success, message } = useSelector(
+    (state) => state.auth
+  );
 
-  const { loading, error, success } = useSelector((state) => state.auth);
-
-  function handleChange(e) {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
-  }
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,135 +28,151 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen w-full max-w-full bg-gray-950 flex flex-col justify-center items-center text-white">
-      <div className="flex flex-col justify-center items-center border-2 p-10 rounded-lg w-11/12 max-w-md">
-        <h1 className="text-3xl font-bold mb-2">Create Your Account</h1>
-        <p className="text-lg font-semibold mb-5">Register to get started</p>
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4 py-6 text-white">
+      <div className="w-full max-w-sm sm:max-w-md bg-gray-900 border border-gray-800 rounded-xl shadow-lg p-5 sm:p-6">
 
-        <button className="flex items-center justify-center w-full bg-gray-200 rounded-md text-black text-lg font-semibold py-2 mb-6 hover:bg-gray-300 transition">
-          <span className="bg-white text-blue-700 font-bold rounded-full w-7 h-7 flex items-center justify-center mr-2">
+        {/* Header */}
+        <h1 className="text-xl sm:text-2xl font-bold text-center">
+          Create Account
+        </h1>
+        <p className="text-center text-gray-400 text-sm mt-1 mb-4">
+          Register to get started
+        </p>
+
+        {/* Google Button */}
+        <button className="flex items-center justify-center w-full bg-gray-200 text-black rounded-md py-2 text-sm font-semibold hover:bg-gray-300 transition">
+          <span className="bg-white text-blue-700 font-bold rounded-full w-6 h-6 flex items-center justify-center mr-2">
             G
           </span>
-          continue with Google
+          Continue with Google
         </button>
 
-        <div className="flex items-center justify-center w-full my-4">
-          <div className="grow border-t border-gray-400"></div>
-          <span className="mx-4 text-gray-400 text-sm">OR</span>
-          <div className="grow border-t border-gray-400"></div>
+        {/* Divider */}
+        <div className="flex items-center my-4">
+          <div className="grow border-t border-gray-700"></div>
+          <span className="px-3 text-gray-400 text-xs">OR</span>
+          <div className="grow border-t border-gray-700"></div>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          noValidate
-          className="w-full p-5 rounded-lg space-y-4"
-        >
-          <div className="flex flex-col">
-            <label className="text-lg font-medium" htmlFor="email">
-              Email
-            </label>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-3">
+
+          {/* Username */}
+          <div>
+            <label className="text-sm font-medium">Username</label>
             <input
-              type="email"
-              placeholder="email@email.com"
-              id="email"
-              value={form.email}
+              type="text"
+              name="username"
+              value={form.username}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-700 bg-gray-800 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
-          <div className="flex gap-3">
-            <div className="flex flex-col">
-              <label className="text-lg font-medium" htmlFor="first name">
-                First name
-              </label>
+          {/* Email */}
+          <div>
+            <label className="text-sm font-medium">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          {/* Name */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm font-medium">First Name</label>
               <input
                 type="text"
-                placeholder="First name"
-                id="first name"
+                name="firstName"
                 value={form.firstName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-700 bg-gray-800 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
+
             <div>
-              <label className="text-lg font-medium" htmlFor="last name">
-                Last name
-              </label>
+              <label className="text-sm font-medium">Last Name</label>
               <input
                 type="text"
-                placeholder="Last name"
-                id="last name"
+                name="lastName"
                 value={form.lastName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-700 bg-gray-800 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>
           </div>
 
-          <fieldset className="flex flex-col">
-            <legend className="text-lg font-semibold text-gray-300">
-              Account type
+          {/* Account Type */}
+          <fieldset>
+            <legend className="text-sm font-medium mb-1 text-gray-300">
+              Account Type
             </legend>
-            <div className="flex items-center gap-5">
+            <div className="flex gap-6 text-sm">
               <label className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="userType"
                   value="user"
-                  onChange={handleChange}
                   checked={form.userType === "user"}
+                  onChange={handleChange}
                   className="accent-blue-500"
                 />
-                <span>User</span>
+                User
               </label>
-              <label>
+              <label className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="userType"
                   value="seller"
-                  onChange={handleChange}
                   checked={form.userType === "seller"}
+                  onChange={handleChange}
                   className="accent-blue-500"
                 />
-                <span>Seller</span>
+                Seller
               </label>
             </div>
           </fieldset>
 
-          <div className="flex flex-col">
-            <label className="text-lg font-medium" htmlFor="password">
-              Password
-            </label>
-            <div>
-              <input
-                type="password"
-                placeholder="*******"
-                id="password"
-                value={form.password}
-                minLength={8}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-700 bg-gray-800 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Minimum 8 characters.
-              </p>
-            </div>
+          {/* Password */}
+          <div>
+            <label className="text-sm font-medium">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              minLength={8}
+              required
+              className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Minimum 8 characters
+            </p>
           </div>
 
+          {/* Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition-colors duration-200"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 text-sm font-semibold rounded-md disabled:opacity-60"
           >
             {loading ? "Registering..." : "Register"}
           </button>
-          {error && <p style={{ color: "red" }}>{error}</p>}
+
+          {/* Messages */}
+          {error && (
+            <p className="text-red-500 text-xs text-center">{error}</p>
+          )}
           {success && (
-            <p style={{ color: "green" }}>Registered Successfully!</p>
+            <p className="text-green-500 text-xs text-center">{message}</p>
           )}
         </form>
       </div>

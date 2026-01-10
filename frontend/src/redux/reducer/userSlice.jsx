@@ -3,23 +3,45 @@ import axios from "axios";
 
 const initialState = {
   user: null,
-  token: null,
   loading: false,
   error: null,
   success: false,
+  message: null,
 };
 
 export const registerUser = createAsyncThunk(
   "api/auth/register",
-  async (userData, { rejectWithValue }) => {
+  async (form, { rejectWithValue }) => {
     try {
-      const responce = await axios.post(
+      const payload = {
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        fullName: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+        },
+        role: form.userType,
+      };
+
+      const response = await axios.post(
         "http://localhost:3000/api/auth/register",
-        userData
+        payload,
+        { withCredentials: true }
       );
-      return responce.data;
+
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      // handle express-validator errors
+      if (error.response?.data?.errors) {
+        return rejectWithValue(
+          error.response.data.errors.map(e => e.msg).join(", ")
+        );
+      }
+
+      return rejectWithValue(
+        error.response?.data?.message || "Registration failed"
+      );
     }
   }
 );
@@ -30,30 +52,29 @@ const userSlice = createSlice({
   reducers: {
     logoutUser: (state) => {
       state.user = null;
-      state.token = null;
-      localStorage.removeItem("token");
+      state.success = false;
+      state.message = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
+        state.success = false;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.user = action.payload.user;
-        state.token = action.payload.token;
-        localStorage.setItem("token", action.payload.token);
+        state.message = action.payload.message; // ✅ "User created"
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload; // ✅ string
       });
   },
 });
 
-const { logoutUser } = userSlice.actions;
-
+export const { logoutUser } = userSlice.actions;
 export default userSlice.reducer;

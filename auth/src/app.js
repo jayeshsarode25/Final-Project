@@ -21,8 +21,8 @@ app.use(passport.initialize());
 
 // Configure Passport to use Google OAuth 2.0 strategy
 passport.use(new Strategy({
-  clientID: config.CLIENT_ID,
-  clientSecret: config.CLIENT_SECRET,
+  clientID: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
   callbackURL: '/api/auth/google/callback',
 }, (accessToken, refreshToken, profile, done) => {
   // Here, you would typically find or create a user in your database

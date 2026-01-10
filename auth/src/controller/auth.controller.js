@@ -78,7 +78,7 @@ async function RegisterUser(req, res) {
 }
 
 
-export async function googleOAuthCallback(req, res) {
+async function googleOAuthCallback(req, res) {
   const user = req.user;
 
   const isUseralreadyExits = await userModel.findOne({
@@ -277,6 +277,7 @@ async function deleteUserAddress(req, res) {
 
 module.exports = {
   RegisterUser,
+  googleOAuthCallback,
   LoginUser,
   GetCurrentUser,
   LogoutUser,
