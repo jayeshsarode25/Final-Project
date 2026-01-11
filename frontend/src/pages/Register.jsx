@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/reducer/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -11,6 +12,8 @@ const Register = () => {
     password: "",
     userType: "user",
   });
+
+  const nevigate = useNavigate();
 
   const dispatch = useDispatch();
   const { loading, error, success, message } = useSelector(
@@ -25,6 +28,8 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(registerUser(form));
+
+    nevigate("/")
   };
 
   return (
