@@ -46,6 +46,34 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const loginUser = createAsyncThunk(
+  async(from,{rejectWithValue})=>{
+    try {
+      const payload = {
+        username: from.username,
+        email:from.email,
+        password:from.password
+      };
+
+      const responce = await axios.post("http://localhost:3000/api/auth/login",
+        payload,
+        {withCredentials:true})
+        return responce.data
+
+    } catch (error) {
+      if (error.response?.data?.errors) {
+        return rejectWithValue(
+          error.response.data.errors.map(e => e.msg).join(", ")
+        );
+      }
+
+      return rejectWithValue(
+        error.response?.data?.message || "Registration failed"
+      )
+    }
+  }
+)
+
 const userSlice = createSlice({
   name: "auth",
   initialState,
@@ -72,7 +100,22 @@ const userSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload; // ✅ string
-      });
+      })
+      .addCase(loginUser.pending,(state)=>{
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(loginUser.fulfilled,(state,action)=>{
+        state.loading = false;
+        state.success = true;
+        state.user = action.payload.user;
+        state.message = action.payload.message;
+      })
+      .addCase(loginUser.rejected,(state,action)=>{
+        state.loading = false;
+        state.error = action.payload
+      })
   },
 });
 

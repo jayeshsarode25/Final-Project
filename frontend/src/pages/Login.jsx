@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../redux/reducer/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
@@ -9,6 +12,25 @@ const Login = () => {
     password:''
   })
 
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch();
+
+  const {loading, error, success, message} = useSelector((state) => state.auth)
+
+
+  function handleChange(e){
+    const {name, value} = e.target;
+    setForm((prev)=> ({...prev,[name]:value}))
+  }
+
+
+  function handleSubmit(e){
+    e.preventDefault()
+    dispatch(loginUser(form))
+
+    navigate("/")
+  }
 
 
   return (
@@ -37,14 +59,16 @@ const Login = () => {
           <div className="grow border-t border-gray-700"></div>
         </div>
 
-        <form className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <label className="text-sm font-medium" htmlFor="username">Username</label>
             <input 
             type="text" 
             placeholder='username' 
             name='username' 
-            id='username' 
+            id='username'
+            onChange={handleChange}
+            value={form.username} 
             className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
             required 
             />
@@ -56,6 +80,8 @@ const Login = () => {
             placeholder='email@email.com' 
             name='email' 
             id='email' 
+            onChange={handleChange}
+            value={form.email}
             className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
             required 
             />
@@ -68,6 +94,8 @@ const Login = () => {
             placeholder='password' 
             name='password'
             id='password' 
+            onChange={handleChange}
+            value={form.password}
             className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
             required />
           </div>
