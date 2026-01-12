@@ -47,6 +47,7 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
+  "api/auth/login",
   async(from,{rejectWithValue})=>{
     try {
       const payload = {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../redux/reducer/userSlice';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
 
-  const {loading, error, success, message} = useSelector((state) => state.auth)
+  const {loading, error, success, message, user} = useSelector((state) => state.auth)
 
 
   function handleChange(e){
@@ -28,9 +28,9 @@ const Login = () => {
   function handleSubmit(e){
     e.preventDefault()
     dispatch(loginUser(form))
-
     navigate("/")
   }
+
 
 
   return (
@@ -102,8 +102,14 @@ const Login = () => {
 
           <button className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 text-sm font-semibold rounded-md disabled:opacity-60" 
           type='submit'>
-            Login
+            {loading ? "Login..." : "Login"}
           </button>
+          {error && (
+            <p className="text-red-500 text-xs text-center">{error}</p>
+          )}
+          {success && (
+            <p className="text-green-500 text-xs text-center">{message}</p>
+          )}
         </form>
       </div>
     </div>
