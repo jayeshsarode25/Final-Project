@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.get("/metrics", createAuthMiddleware([ "seller" ], sellerController.getMetrics))
 
-// router.get("/orders", createAuthMiddleware([ "seller" ], sellerController.getOrders))
+router.get("/orders", createAuthMiddleware([ "seller" ], sellerController.getOrders))
 
-// router.get("/products", createAuthMiddleware([ "seller" ], sellerController.getProducts))
+router.get("/products", createAuthMiddleware([ "seller" ], sellerController.getProducts))
 
 
 
