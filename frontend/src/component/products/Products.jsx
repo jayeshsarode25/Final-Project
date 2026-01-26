@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { fratchProducts } from '../redux/reducer/ProductSlice';
+import { fratchProducts } from '../../redux/reducer/ProductSlice';
 
-const ProductPage = () => {
+const Products = () => {
   const dispatch = useDispatch();
   const { products, loading } = useSelector(
-    (state) => state.product
+    (state) => state.products
   );
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const ProductPage = () => {
 
   return (
     <div>
-      {products?.map((p) => (
+      {products.map((p) => (
         <div key={p._id}>
           <h3>{p.title}</h3>
           <p>{p.description}</p>
@@ -28,6 +28,6 @@ const ProductPage = () => {
       ))}
     </div>
   );
-}
+};
 
-export default ProductPage
+export default Products
