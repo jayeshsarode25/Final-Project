@@ -1,26 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import Button from '../components/ui/Button';
+import { Home, Search } from 'lucide-react';
 
-const NotFound = () => {
+export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-950 px-4 text-center">
-      <h1 className="text-9xl font-extrabold text-gray-100">404</h1>
+    <div
+      className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      <div className="text-center animate-fade-in-up max-w-md">
+        {/* Animated 404 */}
+        <div className="relative mb-8">
+          <h1
+            className="text-[120px] sm:text-[160px] font-extrabold leading-none select-none gradient-text animate-float"
+          >
+            404
+          </h1>
+        </div>
 
-      <p className="mt-4 text-2xl font-semibold text-gray-700">
-        Page Not Found
-      </p>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
+          Page Not Found
+        </h2>
+        <p className="text-sm mb-8 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          Oops! The page you're looking for seems to have wandered off.
+          <br />
+          Let's get you back on track.
+        </p>
 
-      <p className="mt-2 max-w-md text-gray-500">
-        Sorry, the page you are looking for doesn’t exist or has been moved.
-      </p>
-
-      <Link
-        to="/"
-        className="mt-6 rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700"
-      >
-        Go Back Home
-      </Link>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link to="/">
+            <Button icon={<Home size={16} />}>Back to Home</Button>
+          </Link>
+          <Link to="/products">
+            <Button variant="outline" icon={<Search size={16} />}>
+              Browse Products
+            </Button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default NotFound;
+}

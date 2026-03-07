@@ -1,119 +1,78 @@
-import React, { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../redux/reducer/userSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { loginUser, clearAuthError } from '../redux/slices/authSlice';
+import { API_BASE } from '../utils/constants';
+import Button from '../components/ui/Button';
+import Input from '../components/ui/Input';
+import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 
-const Login = () => {
-
-
-  const [form, setForm] = useState({
-    email:'',
-    username:'',
-    password:''
-  })
-
-  const navigate = useNavigate()
-
+export default function Login() {
+  const [form, setForm] = useState({ email: '', username: '', password: '' });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { loading, error, success, user } = useSelector((state) => state.auth);
+  const from = location.state?.from || '/';
 
-  const {loading, error, success, message, user} = useSelector((state) => state.auth)
+  useEffect(() => { dispatch(clearAuthError()); }, [dispatch]);
+  useEffect(() => { if (success && user) navigate(from, { replace: true }); }, [success, user, navigate, from]);
 
-
-  function handleChange(e){
-    const {name, value} = e.target;
-    setForm((prev)=> ({...prev,[name]:value}))
-  }
-
-
-  function handleSubmit(e){
-    e.preventDefault()
-    dispatch(loginUser(form))
-    navigate("/")
-  }
-
-
+  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleSubmit = (e) => { e.preventDefault(); dispatch(loginUser(form)); };
+  const handleGoogle = () => { window.location.href = `${API_BASE.AUTH}/google`; };
 
   return (
-    <div className='min-h-screen bg-gray-950 flex justify-center items-center px-4 py-3 text-white'>
-      <div className='w-full max-w-sm sm:max-w-md bg-gray-900 border border-gray-800 rounded-xl shadow-lg p-5 sm:p-6'>
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12 mh-bg-primary">
+      <div className="w-full max-w-md mh-card p-8 animate-fade-in-up mh-shadow-xl">
         {/* Header */}
-        <h1 className="text-xl sm:text-2xl font-bold text-center">
-          Login to Market
-        </h1>
-        <p className="text-center text-gray-400 text-sm mt-1 mb-4">
-          Login to get started
-        </p>
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-white text-xl mx-auto mb-5"
+            style={{ background: 'var(--accent-gradient)' }}>
+            M
+          </div>
+          <h1 className="text-2xl font-bold mh-text-primary">Welcome Back</h1>
+          <p className="text-sm mt-1 mh-text-secondary">Login to your MarketHub account</p>
+        </div>
 
-        {/* Google Button */}
-        <button className="flex items-center justify-center w-full bg-gray-200 text-black rounded-md py-2 text-sm font-semibold hover:bg-gray-300 transition">
-          <span className="bg-white text-blue-700 font-bold rounded-full w-6 h-6 flex items-center justify-center mr-2">
-            G
-          </span>
+        {/* Google */}
+        <button onClick={handleGoogle}
+          className="flex items-center justify-center gap-3 w-full py-3 rounded-xl border mh-border text-sm font-semibold mh-text-primary mh-bg-secondary hover:opacity-80 cursor-pointer transition-all">
+          <span className="w-6 h-6 rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-xs shadow-sm">G</span>
           Continue with Google
         </button>
 
         {/* Divider */}
-        <div className="flex items-center my-4">
-          <div className="grow border-t border-gray-700"></div>
-          <span className="px-3 text-gray-400 text-xs">OR</span>
-          <div className="grow border-t border-gray-700"></div>
+        <div className="flex items-center my-6">
+          <div className="flex-1 border-t mh-border" />
+          <span className="px-4 text-xs mh-text-tertiary">OR</span>
+          <div className="flex-1 border-t mh-border" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <label className="text-sm font-medium" htmlFor="username">Username</label>
-            <input 
-            type="text" 
-            placeholder='username' 
-            name='username' 
-            id='username'
-            onChange={handleChange}
-            value={form.username} 
-            className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
-            required 
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium" htmlFor="email">Email</label>
-            <input 
-            type="email"
-            placeholder='email@email.com' 
-            name='email' 
-            id='email' 
-            onChange={handleChange}
-            value={form.email}
-            className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
-            required 
-            />
-          </div>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <Input label="Username" type="text" name="username" id="login-username"
+            value={form.username} onChange={handleChange} placeholder="johndoe"
+            icon={<User size={16} />} required />
+          <Input label="Email" type="email" name="email" id="login-email"
+            value={form.email} onChange={handleChange} placeholder="you@example.com"
+            icon={<Mail size={16} />} required />
+          <Input label="Password" type="password" name="password" id="login-password"
+            value={form.password} onChange={handleChange} placeholder="••••••••"
+            icon={<Lock size={16} />} required />
 
-          <div>
-            <label className="text-sm font-medium" htmlFor="password">Password</label>
-            <input 
-            type="password" 
-            placeholder='password' 
-            name='password'
-            id='password' 
-            onChange={handleChange}
-            value={form.password}
-            className="mt-1 w-full px-3 py-2 text-sm bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
-            required />
-          </div>
+          <Button type="submit" loading={loading} className="w-full !py-3">
+            Login <ArrowRight size={16} />
+          </Button>
 
-          <button className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2 text-sm font-semibold rounded-md disabled:opacity-60" 
-          type='submit'>
-            {loading ? "Login..." : "Login"}
-          </button>
-          {error && (
-            <p className="text-red-500 text-xs text-center">{error}</p>
-          )}
-          {success && (
-            <p className="text-green-500 text-xs text-center">{message}</p>
-          )}
+          {error && <p className="text-xs text-center" style={{ color: 'var(--error)' }}>{error}</p>}
         </form>
+
+        <p className="text-center text-sm mt-6 mh-text-tertiary">
+          Don't have an account?{' '}
+          <Link to="/register" className="font-semibold mh-text-accent">Register</Link>
+        </p>
       </div>
     </div>
-  )
+  );
 }
-
-export default Login

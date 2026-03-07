@@ -1,31 +1,49 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import Home from "../pages/Home"
-import Login from "../pages/Login"
-import Register from "../pages/Register"
-import NotFount from "../pages/NotFound"
-import ProductPage from '../pages/ProductPage'
-import AiBuddy from '../component/navbar/AiBuddy'
-import AboutUs from '../pages/AboutUs'
-import Cart from '../component/navbar/Cart'
+import { Route, Routes } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
 
+// Pages
+import Home from '../pages/Home';
+import Products from '../pages/Products';
+import ProductDetail from '../pages/ProductDetail';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import Cart from '../pages/Cart';
+import Checkout from '../pages/Checkout';
+import Orders from '../pages/Orders';
+import OrderDetail from '../pages/OrderDetail';
+import AiBuddy from '../pages/AiBuddy';
+import SellerDashboard from '../pages/SellerDashboard';
+import AboutUs from '../pages/AboutUs';
+import NotFound from '../pages/NotFound';
 
-const MainRoutes = () => {
+export default function MainRoutes() {
   return (
     <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/login' element={<Login/>} />
-      <Route path='/register' element={<Register />}/>
-      <Route path='/product' element={<ProductPage />}/>
-      <Route path='/ai-buddy' element={<AiBuddy />}/>
-      <Route path='/about-us' element={<AboutUs/>}/>
-      <Route path='/cart' element={<Cart/>}/>
+      <Route path="/" element={<Home />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/about-us" element={<AboutUs />} />
+      <Route path="/ai-buddy" element={<AiBuddy />} />
 
+      {/* Protected: user */}
+      <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+      <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+      <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+      <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
 
-      
-      <Route path='*' element={<NotFount />} />
+      {/* Protected: seller */}
+      <Route
+        path="/seller"
+        element={
+          <ProtectedRoute roles={['seller', 'admin']}>
+            <SellerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
-  )
+  );
 }
-
-export default MainRoutes

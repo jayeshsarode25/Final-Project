@@ -15,15 +15,15 @@ const Products = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className='flex flex-col gap-4 justify-center items-center w-full'>
       {products.map((p) => (
-        <div key={p._id}>
-          <h3>{p.title}</h3>
-          <p>{p.description}</p>
-          <p>
+        <div key={p._id} className='border border-gray-300 rounded-md p-4 w-full'>
+          <h3 className='text-lg font-bold'>{p.title}</h3>
+          <p className='text-gray-600'>{p.description}</p>
+          <p className='text-gray-600'>
             {p.price.currency} {p.price.amount}
           </p>
-          <p>Stock: {p.stock}</p>
+          <p className='text-gray-600'>Stock: {p.stock}</p>
         </div>
       ))}
     </div>

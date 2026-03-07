@@ -1,16 +1,30 @@
-import React from 'react'
-import MainRoutes from './routes/MainRoutes'
-import Navbar from './component/navbar/Navbar'
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import MainRoutes from './routes/MainRoutes';
+import { fetchCurrentUser } from './redux/slices/authSlice';
 
-const App = () => {
+export default function App() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  useEffect(() => { dispatch(fetchCurrentUser()); }, [dispatch]);
+
+  // Hide footer on AI Buddy page (it fills the viewport)
+  const hideFooter = location.pathname === '/ai-buddy';
+
   return (
-    <div className='h-screen w-full bg-linear-to-b from-[#010528] to-[#004B8E] text-white'>
-
-      <Navbar />
-
-      <MainRoutes/>
-    </div>
-  )
+    <ThemeProvider>
+      <div className="min-h-screen flex flex-col mh-bg-primary mh-text-primary">
+        <Navbar />
+        <main className="flex-1 pt-16">
+          <MainRoutes />
+        </main>
+        {!hideFooter && <Footer />}
+      </div>
+    </ThemeProvider>
+  );
 }
-
-export default App
