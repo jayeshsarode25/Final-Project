@@ -25,10 +25,10 @@ const footerLinks = {
 export default function Footer() {
   return (
     <footer style={{ backgroundColor: 'var(--bg-footer)', color: '#94a3b8' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
           {/* Brand */}
-          <div>
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
                 style={{ background: 'var(--accent-gradient)' }}>
@@ -36,7 +36,7 @@ export default function Footer() {
               </div>
               <span className="text-lg font-bold text-white">MarketHub</span>
             </div>
-            <p className="text-sm leading-relaxed mb-5">
+            <p className="text-sm leading-relaxed mb-5 max-w-xs">
               Shop smarter with MarketHub. Discover the best deals on electronics, fashion, home essentials, and more.
             </p>
             <div className="flex gap-3">
@@ -52,11 +52,11 @@ export default function Footer() {
           {/* Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4 className="text-white font-semibold text-sm mb-4">{title}</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-white font-semibold text-sm mb-3 sm:mb-4">{title}</h4>
+              <ul className="space-y-2 sm:space-y-2.5">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link to={link.to} className="text-sm hover:text-white transition-colors hover:pl-1">
+                    <Link to={link.to} className="text-sm hover:text-white transition-colors hover:pl-1 inline-block">
                       {link.label}
                     </Link>
                   </li>
@@ -68,9 +68,9 @@ export default function Footer() {
       </div>
 
       <div className="border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between text-xs gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex flex-col sm:flex-row items-center justify-between text-xs gap-2 sm:gap-3">
           <p>&copy; 2026 MarketHub. All rights reserved.</p>
-          <div className="flex gap-5">
+          <div className="flex gap-4 sm:gap-5">
             <a href="#" className="hover:text-white transition-colors">Privacy</a>
             <a href="#" className="hover:text-white transition-colors">Terms</a>
             <a href="#" className="hover:text-white transition-colors">Cookies</a>

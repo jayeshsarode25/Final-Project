@@ -9,7 +9,7 @@ import { formatPrice } from '../utils/helpers';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Card from '../components/ui/Card';
-import { MapPin, Plus, CreditCard, CheckCircle } from 'lucide-react';
+import { MapPin, Plus, CreditCard, CheckCircle, X } from 'lucide-react';
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -67,12 +67,10 @@ export default function Checkout() {
 
       const orderId = orderRes.order?._id || orderRes._id;
 
-      // Create Razorpay payment
       try {
         const payRes = await paymentApi.createPayment(orderId);
         const payData = payRes.data;
 
-        // Open Razorpay
         const options = {
           key: payData.key || payData.key_id,
           amount: payData.amount,
@@ -99,12 +97,10 @@ export default function Checkout() {
           const rzp = new window.Razorpay(options);
           rzp.open();
         } else {
-          // Razorpay not loaded, just navigate
           dispatch(clearCart());
           navigate(`/orders/${orderId}`);
         }
       } catch (payErr) {
-        // Payment service may not be running — still created order
         dispatch(clearCart());
         navigate(`/orders/${orderId}`);
       }
@@ -128,26 +124,26 @@ export default function Checkout() {
 
   return (
     <div style={{ backgroundColor: 'var(--bg-primary)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold mb-8" style={{ color: 'var(--text-primary)' }}>Checkout</h1>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8" style={{ color: 'var(--text-primary)' }}>Checkout</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="lg:col-span-2 space-y-5 sm:space-y-6">
             {/* Address Selection */}
             <div
-              className="p-6 rounded-[var(--radius-xl)] border"
+              className="p-4 sm:p-6 rounded-[var(--radius-xl)] border"
               style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
             >
-              <h2 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-                <MapPin size={20} style={{ color: 'var(--accent)' }} /> Delivery Address
+              <h2 className="text-base sm:text-lg font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                <MapPin size={18} style={{ color: 'var(--accent)' }} /> Delivery Address
               </h2>
 
               {addresses.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {addresses.map((addr) => (
                     <label
                       key={addr._id}
-                      className="flex items-start gap-3 p-4 rounded-[var(--radius-md)] border cursor-pointer transition-all"
+                      className="flex items-start gap-3 p-3 sm:p-4 rounded-[var(--radius-md)] border cursor-pointer transition-all"
                       style={{
                         borderColor: selectedAddress === addr._id ? 'var(--accent)' : 'var(--border)',
                         backgroundColor: selectedAddress === addr._id ? 'var(--accent-subtle)' : 'transparent',
@@ -158,9 +154,9 @@ export default function Checkout() {
                         name="address"
                         checked={selectedAddress === addr._id}
                         onChange={() => setSelectedAddress(addr._id)}
-                        className="mt-1 accent-[var(--accent)]"
+                        className="mt-0.5 sm:mt-1 accent-[var(--accent)]"
                       />
-                      <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                      <div className="text-xs sm:text-sm min-w-0" style={{ color: 'var(--text-secondary)' }}>
                         {addr.street}, {addr.city}, {addr.state} — {addr.pincode}
                       </div>
                     </label>
@@ -173,12 +169,12 @@ export default function Checkout() {
               {showAddForm ? (
                 <form onSubmit={handleAddAddress} className="mt-4 space-y-3">
                   <Input label="Street" value={newAddress.street} onChange={(e) => setNewAddress({ ...newAddress, street: e.target.value })} required />
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <Input label="City" value={newAddress.city} onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })} required />
                     <Input label="State" value={newAddress.state} onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })} required />
                   </div>
                   <Input label="Pincode" value={newAddress.pincode} onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })} required />
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Button type="submit">Save Address</Button>
                     <Button variant="ghost" type="button" onClick={() => setShowAddForm(false)}>Cancel</Button>
                   </div>
@@ -198,24 +194,24 @@ export default function Checkout() {
           {/* Summary */}
           <div>
             <div
-              className="sticky top-24 p-6 rounded-[var(--radius-xl)] border"
+              className="sticky top-24 p-5 sm:p-6 rounded-[var(--radius-xl)] border"
               style={{
                 backgroundColor: 'var(--bg-card)',
                 borderColor: 'var(--border)',
                 boxShadow: 'var(--shadow-lg)',
               }}
             >
-              <h3 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Order Summary</h3>
+              <h3 className="text-base sm:text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Order Summary</h3>
               <div className="space-y-2 mb-4">
                 {items.map((item) => {
                   const product = item.product || item;
                   const price = product.price?.amount || item.price || 0;
                   return (
-                    <div key={item.productId || product._id} className="flex justify-between text-sm">
-                      <span className="line-clamp-1 flex-1" style={{ color: 'var(--text-secondary)' }}>
+                    <div key={item.productId || product._id} className="flex justify-between text-xs sm:text-sm gap-2">
+                      <span className="line-clamp-1 flex-1 min-w-0" style={{ color: 'var(--text-secondary)' }}>
                         {product.title || 'Item'} × {item.quantity}
                       </span>
-                      <span className="font-medium ml-2" style={{ color: 'var(--text-primary)' }}>
+                      <span className="font-medium flex-shrink-0 ml-2" style={{ color: 'var(--text-primary)' }}>
                         {formatPrice(price * item.quantity)}
                       </span>
                     </div>
@@ -238,7 +234,7 @@ export default function Checkout() {
                   <span style={{ color: 'var(--text-primary)' }}>{formatPrice(tax)}</span>
                 </div>
               </div>
-              <div className="flex justify-between pt-4 border-t mt-4 font-bold text-lg" style={{ borderColor: 'var(--border)' }}>
+              <div className="flex justify-between pt-4 border-t mt-4 font-bold text-base sm:text-lg" style={{ borderColor: 'var(--border)' }}>
                 <span style={{ color: 'var(--text-primary)' }}>Total</span>
                 <span style={{ color: 'var(--accent)' }}>{formatPrice(total)}</span>
               </div>

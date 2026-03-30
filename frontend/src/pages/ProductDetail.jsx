@@ -69,21 +69,21 @@ export default function ProductDetail() {
 
   return (
     <div style={{ backgroundColor: 'var(--bg-primary)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm mb-8" style={{ color: 'var(--text-tertiary)' }}>
-          <Link to="/" className="hover:underline" style={{ color: 'var(--text-secondary)' }}>Home</Link>
-          <ChevronRight size={14} />
-          <Link to="/products" className="hover:underline" style={{ color: 'var(--text-secondary)' }}>Products</Link>
-          <ChevronRight size={14} />
-          <span style={{ color: 'var(--text-primary)' }}>{product.title}</span>
+        <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm mb-6 sm:mb-8 overflow-x-auto" style={{ color: 'var(--text-tertiary)' }}>
+          <Link to="/" className="hover:underline flex-shrink-0" style={{ color: 'var(--text-secondary)' }}>Home</Link>
+          <ChevronRight size={14} className="flex-shrink-0" />
+          <Link to="/products" className="hover:underline flex-shrink-0" style={{ color: 'var(--text-secondary)' }}>Products</Link>
+          <ChevronRight size={14} className="flex-shrink-0" />
+          <span className="truncate" style={{ color: 'var(--text-primary)' }}>{product.title}</span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
           {/* Image Gallery */}
-          <div className="space-y-4 animate-fade-in">
+          <div className="space-y-3 sm:space-y-4 animate-fade-in">
             <div
-              className="relative h-80 sm:h-[420px] rounded-[var(--radius-xl)] overflow-hidden"
+              className="relative h-64 sm:h-80 lg:h-[420px] rounded-[var(--radius-xl)] overflow-hidden"
               style={{ backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border)' }}
             >
               {images[selectedImage] ? (
@@ -93,16 +93,16 @@ export default function ProductDetail() {
                   className="w-full h-full object-contain p-4"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-6xl">📦</div>
+                <div className="w-full h-full flex items-center justify-center text-5xl sm:text-6xl">📦</div>
               )}
             </div>
             {images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2">
+              <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide">
                 {images.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedImage(i)}
-                    className="w-16 h-16 flex-shrink-0 rounded-[var(--radius-md)] overflow-hidden border-2 transition-all cursor-pointer"
+                    className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-[var(--radius-md)] overflow-hidden border-2 transition-all cursor-pointer"
                     style={{
                       borderColor: i === selectedImage ? 'var(--accent)' : 'var(--border)',
                       backgroundColor: 'var(--bg-tertiary)',
@@ -124,29 +124,29 @@ export default function ProductDetail() {
             {product.category && (
               <Badge className="mb-3">{product.category}</Badge>
             )}
-            <h1 className="text-2xl sm:text-3xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3" style={{ color: 'var(--text-primary)' }}>
               {product.title}
             </h1>
 
-            <div className="flex items-center gap-4 mb-5">
-              <div className="flex items-center gap-1" style={{ color: 'var(--warning)' }}>
+            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-5">
+              <div className="flex items-center gap-0.5 sm:gap-1" style={{ color: 'var(--warning)' }}>
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} fill={i < 4 ? 'currentColor' : 'none'} />
+                  <Star key={i} size={14} fill={i < 4 ? 'currentColor' : 'none'} />
                 ))}
-                <span className="text-sm ml-1" style={{ color: 'var(--text-secondary)' }}>4.0 (24 reviews)</span>
+                <span className="text-xs sm:text-sm ml-1" style={{ color: 'var(--text-secondary)' }}>4.0 (24 reviews)</span>
               </div>
             </div>
 
-            <div className="text-3xl font-bold mb-6" style={{ color: 'var(--accent)' }}>
+            <div className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6" style={{ color: 'var(--accent)' }}>
               {formatPrice(product.price?.amount || 0, product.price?.currency || 'INR')}
             </div>
 
-            <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-sm leading-relaxed mb-4 sm:mb-6" style={{ color: 'var(--text-secondary)' }}>
               {product.description}
             </p>
 
             {/* Stock */}
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-5 sm:mb-6">
               {product.stock > 0 ? (
                 <Badge color="success">In Stock ({product.stock})</Badge>
               ) : (
@@ -156,9 +156,9 @@ export default function ProductDetail() {
 
             {/* Quantity + Add to Cart */}
             {product.stock > 0 && (
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div
-                  className="flex items-center gap-3 border rounded-[var(--radius-md)] p-1"
+                  className="flex items-center justify-center gap-3 border rounded-[var(--radius-md)] p-1"
                   style={{ borderColor: 'var(--border)' }}
                 >
                   <button
@@ -195,14 +195,14 @@ export default function ProductDetail() {
 
             {/* Features */}
             <div
-              className="grid grid-cols-2 gap-3 p-4 rounded-[var(--radius-lg)] border"
+              className="grid grid-cols-2 gap-3 p-3 sm:p-4 rounded-[var(--radius-lg)] border"
               style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border)' }}
             >
               {[
-                { icon: <Truck size={18} />, label: 'Free Delivery' },
-                { icon: <ShieldCheck size={18} />, label: 'Secure Payment' },
-                { icon: <RotateCcw size={18} />, label: 'Easy Returns' },
-                { icon: <Package size={18} />, label: 'Quality Assured' },
+                { icon: <Truck size={16} />, label: 'Free Delivery' },
+                { icon: <ShieldCheck size={16} />, label: 'Secure Payment' },
+                { icon: <RotateCcw size={16} />, label: 'Easy Returns' },
+                { icon: <Package size={16} />, label: 'Quality Assured' },
               ].map((f, i) => (
                 <div key={i} className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
                   <span style={{ color: 'var(--accent)' }}>{f.icon}</span>
@@ -214,13 +214,13 @@ export default function ProductDetail() {
         </div>
 
         {/* Tabs */}
-        <div className="mt-12">
-          <div className="flex border-b" style={{ borderColor: 'var(--border)' }}>
+        <div className="mt-8 sm:mt-12">
+          <div className="flex border-b overflow-x-auto scrollbar-hide" style={{ borderColor: 'var(--border)' }}>
             {['description', 'specifications', 'reviews'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className="px-6 py-3 text-sm font-medium capitalize transition-colors cursor-pointer"
+                className="px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium capitalize transition-colors cursor-pointer whitespace-nowrap flex-shrink-0"
                 style={{
                   color: activeTab === tab ? 'var(--accent)' : 'var(--text-tertiary)',
                   borderBottom: activeTab === tab ? '2px solid var(--accent)' : '2px solid transparent',
@@ -230,7 +230,7 @@ export default function ProductDetail() {
               </button>
             ))}
           </div>
-          <div className="py-6">
+          <div className="py-5 sm:py-6">
             {activeTab === 'description' && (
               <p className="text-sm leading-relaxed max-w-3xl" style={{ color: 'var(--text-secondary)' }}>
                 {product.description || 'No description available.'}

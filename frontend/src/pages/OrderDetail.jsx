@@ -43,22 +43,22 @@ export default function OrderDetail() {
 
   return (
     <div style={{ backgroundColor: 'var(--bg-primary)' }}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <button
           onClick={() => navigate('/orders')}
-          className="flex items-center gap-2 text-sm mb-6 cursor-pointer"
+          className="flex items-center gap-2 text-sm mb-5 sm:mb-6 cursor-pointer"
           style={{ color: 'var(--text-secondary)' }}
         >
           <ArrowLeft size={16} /> Back to Orders
         </button>
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+            <h1 className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
               Order #{order._id?.slice(-8).toUpperCase()}
             </h1>
-            <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
+            <p className="text-xs sm:text-sm" style={{ color: 'var(--text-tertiary)' }}>
               Placed on {new Date(order.createdAt).toLocaleDateString('en-IN', {
                 day: 'numeric', month: 'long', year: 'numeric',
               })}
@@ -71,28 +71,28 @@ export default function OrderDetail() {
 
         {/* Items */}
         <div
-          className="p-6 rounded-[var(--radius-xl)] border mb-6"
+          className="p-4 sm:p-6 rounded-[var(--radius-xl)] border mb-4 sm:mb-6"
           style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
         >
-          <h3 className="font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Items</h3>
-          <div className="space-y-4">
+          <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base" style={{ color: 'var(--text-primary)' }}>Items</h3>
+          <div className="space-y-3 sm:space-y-4">
             {(order.items || []).map((item, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+              <div key={i} className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className="w-12 h-12 rounded-[var(--radius-md)] flex items-center justify-center"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-[var(--radius-md)] flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: 'var(--bg-tertiary)' }}
                   >
                     📦
                   </div>
-                  <div>
-                    <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                  <div className="min-w-0">
+                    <p className="text-xs sm:text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
                       {item.title || item.productId || 'Product'}
                     </p>
-                    <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Qty: {item.quantity}</p>
+                    <p className="text-[10px] sm:text-xs" style={{ color: 'var(--text-tertiary)' }}>Qty: {item.quantity}</p>
                   </div>
                 </div>
-                <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                <p className="font-medium text-xs sm:text-sm flex-shrink-0" style={{ color: 'var(--text-primary)' }}>
                   {formatPrice(item.price || 0)}
                 </p>
               </div>
@@ -103,13 +103,13 @@ export default function OrderDetail() {
         {/* Address */}
         {order.address && (
           <div
-            className="p-6 rounded-[var(--radius-xl)] border mb-6"
+            className="p-4 sm:p-6 rounded-[var(--radius-xl)] border mb-4 sm:mb-6"
             style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
           >
-            <h3 className="font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-              <MapPin size={18} style={{ color: 'var(--accent)' }} /> Delivery Address
+            <h3 className="font-semibold mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base" style={{ color: 'var(--text-primary)' }}>
+              <MapPin size={16} style={{ color: 'var(--accent)' }} /> Delivery Address
             </h3>
-            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-xs sm:text-sm" style={{ color: 'var(--text-secondary)' }}>
               {order.address.street}, {order.address.city}, {order.address.state} — {order.address.pincode}
             </p>
           </div>
@@ -117,10 +117,10 @@ export default function OrderDetail() {
 
         {/* Total */}
         <div
-          className="p-6 rounded-[var(--radius-xl)] border mb-6"
+          className="p-4 sm:p-6 rounded-[var(--radius-xl)] border mb-4 sm:mb-6"
           style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
         >
-          <div className="flex justify-between text-lg font-bold">
+          <div className="flex justify-between text-base sm:text-lg font-bold">
             <span style={{ color: 'var(--text-primary)' }}>Total</span>
             <span style={{ color: 'var(--accent)' }}>
               {formatPrice(order.totalAmount || order.total || 0)}
